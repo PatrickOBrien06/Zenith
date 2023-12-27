@@ -11,3 +11,14 @@ def home():
         reps = request.form.get('reps')
         
     return render_template("index.html", exercise=exercise, weight=weight, reps=reps)
+
+
+@auth.route("/signup", methods=['POST', 'GET'])
+def signup():
+    if request.method == "POST":
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+
+        return render_template("signup.html")
