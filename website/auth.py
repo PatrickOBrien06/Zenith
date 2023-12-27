@@ -5,6 +5,9 @@ auth = Blueprint("auth", __name__, template_folder="templates")
 @auth.route("/", methods=['POST', 'GET'])
 @auth.route("/home", methods=['POST', 'GET'])
 def home():
+    exercise = 0
+    weight = 0
+    reps = 0
     if request.method == "POST":
         exercise = request.form.get('exercise')
         weight = request.form.get('weight')
@@ -21,4 +24,4 @@ def signup():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        return render_template("signup.html")
+    return render_template("signup.html")
