@@ -6,9 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint("auth", __name__, template_folder="templates")
 
-@login_required
 @auth.route("/", methods=['POST', 'GET'])
 @auth.route("/home", methods=['POST', 'GET'])
+@login_required
 def home():
     exercise = 0
     weight = 0
@@ -69,3 +69,8 @@ def login():
             flash("Invalid email or password!", "danger")
 
     return render_template("login.html")
+
+@auth.route("/logout", methods=["POST", "GET"])
+def logout():
+    logout_user()
+    return redirect(url_for("auth.login"))
