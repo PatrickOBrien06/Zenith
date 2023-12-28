@@ -1,7 +1,12 @@
-from flask import Flask, Blueprint, render_template, request
+from flask import Flask, Blueprint, render_template, request, flash, session, redirect, url_for
+from .models import User
+from . import db 
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint("auth", __name__, template_folder="templates")
 
+@login_required
 @auth.route("/", methods=['POST', 'GET'])
 @auth.route("/home", methods=['POST', 'GET'])
 def home():
@@ -23,5 +28,24 @@ def signup():
         username = request.form.get('username')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+
+        # Error handling
+        email_exists = User.query.filter_by(email=email).first()
+        if email_exists:
+            flash("Email already exists!", "danger")
+
+        elif password1 != password2:
+            flash("Password do not match!", "danger")
+
+        # User creation
+        else:
+            password_hash = generate_password_hash(password1, method='pbkdf2')
+            user = User(email=email, username=username, password=password_hash)
+            session[email] = password_hash
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=True)
+            flash("User created!", "success")
+            return redirect(url_for("auth.home"))
 
     return render_template("signup.html")
