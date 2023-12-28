@@ -49,3 +49,23 @@ def signup():
             return redirect(url_for("auth.home"))
 
     return render_template("signup.html")
+
+@auth.route("/login", methods=["POST", "GET"])
+def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            if check_password_hash(user.password, password):
+                flash("Signed In!", "success")
+                login_user(user, remember=True)
+                return redirect(url_for("auth.home"))
+            else:
+                flash("Invalid email or password!", "danger")
+        else:
+            flash("Invalid email or password!", "danger")
+
+    return render_template("login.html")
