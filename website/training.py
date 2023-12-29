@@ -25,4 +25,4 @@ def home():
 # Create Schedule
 @training.route("/create_schedule", methods=["POST", "GET"])
 def create_schedule():
-    return render_template("add_exercise.html")
+    return render_template("create_schedule.html")

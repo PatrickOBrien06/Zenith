@@ -16,6 +16,10 @@ def create_app():
 
     app.register_blueprint(auth)
 
+    from .training import training
+
+    app.register_blueprint(training)
+
     from .models import User
 
     create_database(app)

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+{% block content %}
+<h1>Create Schedule</h1>
+<form method="post">
+    <label for="exercise_name">
+        <input type="text" placeholder="Enter exercise" name="exercise_name" id="exercise_name">
+    </label>
+    <h2>Set 1</h2>
+    <label for="set_weight">
+        <input type="text" placeholder="Enter weight" name="set_weight" id="set_weight">
+    </label>
+    <label for="set_reps">
+        <input type="text" placeholder="Enter reps" name="set_reps" id="set_reps">
+    </label>
+    <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

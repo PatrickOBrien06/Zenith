@@ -7,21 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # Blueprint development
 auth = Blueprint("auth", __name__, template_folder="templates")
 
-# Home / Dashboard layout 
-@auth.route("/", methods=['POST', 'GET'])
-@auth.route("/home", methods=['POST', 'GET'])
-@login_required
-def home():
-    exercise = 0
-    weight = 0
-    reps = 0
-    if request.method == "POST":
-        exercise = request.form.get('exercise')
-        weight = request.form.get('weight')
-        reps = request.form.get('reps')
-        
-    return render_template("index.html", exercise=exercise, weight=weight, reps=reps)
-
 # Signup page 
 @auth.route("/signup", methods=['POST', 'GET'])
 def signup():
@@ -66,7 +51,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash("Signed In!", "success")
                 login_user(user, remember=True)
-                return redirect(url_for("auth.home"))
+                return redirect(url_for("training.home"))
             
             # Error handling
             else:
@@ -81,7 +66,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for("auth.login"))
-
-@auth.route("/create_schedule", methods=["POST", "GET"])
-def create_schedule():
-    return render_template("add_exercise.html")
