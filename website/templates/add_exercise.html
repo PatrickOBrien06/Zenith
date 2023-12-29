@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %} Create Schedule {% endblock %}
+{% block content %}
+<form method="POST" id="addExerciseForm">
+    <!-- Schedule details and other fields -->
+    
+    <div id="exercisesContainer">
+        <!-- Initially, a single exercise input fields will be present -->
+        <div class="exercise">
+            <input type="text" name="exercise_name[]" placeholder="Exercise Name">
+            <div class="setsContainer">
+                <!-- Input fields for sets -->
+                <div class="set">
+                    <input type="text" name="weight[]" placeholder="Weight">
+                    <input type="text" name="reps[]" placeholder="Reps">
+                </div>
+            </div>
+            <button type="button" class="addSetButton">Add Set</button>
+        </div>
+    </div>
+
+    <button type="button" id="addExerciseButton">Add Exercise</button>
+    <button type="submit">Save Exercises</button>
+</form>
+
+<script>
+document.getElementById('addExerciseButton').onclick = function() {
+    // Create new exercise input fields
+    const exercisesContainer = document.getElementById('exercisesContainer');
+    const newExerciseDiv = document.createElement('div');
+    newExerciseDiv.classList.add('exercise');
+    newExerciseDiv.innerHTML = `
+        <input type="text" name="exercise_name[]" placeholder="Exercise Name">
+        <div class="setsContainer">
+            <div class="set">
+                <input type="text" name="weight[]" placeholder="Weight">
+                <input type="text" name="reps[]" placeholder="Reps">
+            </div>
+        </div>
+        <button type="button" class="addSetButton">Add Set</button>
+    `;
+    exercisesContainer.appendChild(newExerciseDiv);
+
+    newExerciseDiv.querySelector('.addSetButton').onclick = function() {
+        // Add set input fields to the specific exercise
+        const setsContainer = newExerciseDiv.querySelector('.setsContainer');
+        const newSetDiv = document.createElement('div');
+        newSetDiv.classList.add('set');
+        newSetDiv.innerHTML = `
+            <input type="text" name="weight[]" placeholder="Weight">
+            <input type="text" name="reps[]" placeholder="Reps">
+        `;
+        setsContainer.appendChild(newSetDiv);
+    };
+};
+
+// Attach event handler for already existing ".addSetButton" elements
+document.querySelectorAll('.addSetButton').forEach(button => {
+    button.onclick = function() {
+        const setsContainer = button.parentNode.querySelector('.setsContainer');
+        const newSetDiv = document.createElement('div');
+        newSetDiv.classList.add('set');
+        newSetDiv.innerHTML = `
+            <input type="text" name="weight[]" placeholder="Weight">
+            <input type="text" name="reps[]" placeholder="Reps">
+        `;
+        setsContainer.appendChild(newSetDiv);
+    };
+});
+</script>
+{% endblock %}

@@ -2,21 +2,7 @@
 {% block title %} Home {% endblock %}
 {% block content %} 
 
-<h1>Create Schedule</h1>
-<form method="post">
-    <input type="text" placeholder="Enter Exercise" name="exercise">
-    <input type="text" placeholder="Enter Weight" name="weight">
-    <input type="text" placeholder="Enter Reps" name="reps">
-    <input type="submit">
-</form>
-{% if exercise != None %}
-{{exercise}}
-{% endif %}
-{% if weight != None %}
-{{weight}}
-{% endif %}
-{% if reps != None %}
-{{reps}}
-{% endif %}
+<!-- Create Schedule Button -->
+<button><a href="/create_schedule">Create Schedule</a></button>
 
 {% endblock %}

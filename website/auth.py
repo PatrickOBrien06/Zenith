@@ -1,11 +1,13 @@
 from flask import Flask, Blueprint, render_template, request, flash, session, redirect, url_for
-from .models import User
+from .models import User, Schedule, Exercise, Set
 from . import db 
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# Blueprint development
 auth = Blueprint("auth", __name__, template_folder="templates")
 
+# Home / Dashboard layout 
 @auth.route("/", methods=['POST', 'GET'])
 @auth.route("/home", methods=['POST', 'GET'])
 @login_required
@@ -20,7 +22,7 @@ def home():
         
     return render_template("index.html", exercise=exercise, weight=weight, reps=reps)
 
-
+# Signup page 
 @auth.route("/signup", methods=['POST', 'GET'])
 def signup():
     if request.method == "POST":
@@ -50,6 +52,7 @@ def signup():
 
     return render_template("signup.html")
 
+# Login page 
 @auth.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
@@ -58,11 +61,14 @@ def login():
 
         user = User.query.filter_by(email=email).first()
 
+        # User checking
         if user:
             if check_password_hash(user.password, password):
                 flash("Signed In!", "success")
                 login_user(user, remember=True)
                 return redirect(url_for("auth.home"))
+            
+            # Error handling
             else:
                 flash("Invalid email or password!", "danger")
         else:
@@ -70,7 +76,12 @@ def login():
 
     return render_template("login.html")
 
+# Logout user
 @auth.route("/logout", methods=["POST", "GET"])
 def logout():
     logout_user()
     return redirect(url_for("auth.login"))
+
+@auth.route("/create_schedule", methods=["POST", "GET"])
+def create_schedule():
+    return render_template("add_exercise.html")
