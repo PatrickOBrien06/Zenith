@@ -1,8 +1,50 @@
 {% extends 'base.html' %}
 {% block title %} Home {% endblock %}
 {% block content %} 
+<style>
+    /* Optional custom styles */
+    .bottom-row {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #f8f9fa;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+<div class="container">
+    {% for schedule in schedules %}
+    <div class="card">
+        <div>
+            {{schedule.schedule_name}}
+        </div>
+        <div>
+            {% for exercise in exercises %}
+                {% if exercise.schedule_id == schedule.id %}
+                    {{exercise.exercise_name}}
+                        <div>{% for set in sets %}
+                            {% if set.exercise_id == exercise.id %}
+                                {{set.weight}} lbs
+                                {{set.reps}} reps
+                            {% endif %} 
+                        {% endfor %}</div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+  </div>
 
-<!-- Create Schedule Button -->
-<button><a href="/create_schedule">Create Schedule</a></button>
-
+  <div class="bottom-row">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <a href="/create_schedule"><button class="btn btn-primary">Create Schedule</button></a>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-secondary">Start Schedule</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -33,7 +33,7 @@ def signup():
             db.session.commit()
             login_user(user, remember=True)
             flash("User created!", "success")
-            return redirect(url_for("auth.home"))
+            return redirect(url_for("training.home"))
 
     return render_template("signup.html")
 
