@@ -30,7 +30,6 @@ def home():
 @login_required
 def create_schedule():
     if request.method == "POST":
-        index = 0
         schedule_name = request.form.get("schedule_name")
         exercise_names = request.form.getlist("exercise_name")
         sets_weight = request.form.getlist("set_weight")
@@ -45,12 +44,10 @@ def create_schedule():
             db.session.add(exercise)
             db.session.commit()
             for set_weight in sets_weight:
-                index += 1
                 for set_reps in sets_reps:
-                    set = Set(reps=set_reps[index], weight=set_weight[index], exercise_id=exercise.id, user_id=current_user.id)
+                    set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                     db.session.add(set)
                     db.session.commit()
-                    
             
 
     return render_template("create_schedule.html")
