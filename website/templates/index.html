@@ -16,24 +16,25 @@
     {% for schedule in schedules %}
     <div class="card">
         <div>
-            {{schedule.schedule_name}}
+            {{ schedule.schedule_name }}
         </div>
         <div>
             {% for exercise in exercises %}
                 {% if exercise.schedule_id == schedule.id %}
-                    {{exercise.exercise_name}}
-                        <div>{% for set in sets %}
+                    {{ exercise.exercise_name }}
+                    <div>
+                        {% for set in sets %}
                             {% if set.exercise_id == exercise.id %}
-                                {{set.weight}} lbs
-                                {{set.reps}} reps
-                            {% endif %} 
-                        {% endfor %}</div>
+                                <div>{{ set.weight }} lbs {{ set.reps }} reps</div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
     {% endfor %}
-  </div>
+</div>
 
   <div class="bottom-row">
     <div class="container">

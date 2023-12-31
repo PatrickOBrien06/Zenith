@@ -2,22 +2,123 @@
 {% block title %}{% endblock %}
 {% block content %}
 <h1>Create Schedule</h1>
-<form method="post">
+<form id="scheduleForm" method="post">
     <label for="schedule_name">
         <input type="text" placeholder="Enter schedule" name="schedule_name" id="schedule_name">
     </label>
     <h2>Exercise</h2>
-    <label for="exercise_name">
-        <input type="text" placeholder="Enter exercise" name="exercise_name" id="exercise_name">
-    </label>
-    <h2>Set 1</h2>
-    <label for="set_weight">
-        <input type="text" placeholder="Enter weight" name="set_weight" id="set_weight">
-    </label>
-    <label for="set_reps">
-        <input type="text" placeholder="Enter reps" name="set_reps" id="set_reps">
-    </label>
-    <input type="submit" value="Submit">
+    <div id="exercisesContainer">
+        <div class="exercise">
+            <label for="exercise_name">
+                <input type="text" placeholder="Enter exercise" name="exercise_name" class="exercise_input">
+            </label>
+            <div class="sets">
+                <h3>Set 1</h3>
+                <div class="set">
+                    <input type="text" placeholder="Enter weight" name="set_weight" class="set_input">
+                    <input type="text" placeholder="Enter reps" name="set_reps" class="set_input">
+                </div>
+            </div>
+            <button type="button" class="addSetButton">Add Set</button>
+        </div>
+    </div>
+    <button type="button" id="addExerciseButton">Add Exercise</button>
+    <button type="submit">Create</button>
 </form>
 
+<script>
+    let exerciseCount = 1;
+
+    function addSetHandler(button) {
+        button.addEventListener('click', function () {
+            const sets = button.parentNode.querySelector('.sets');
+            const setCount = sets.querySelectorAll('.set').length + 1;
+
+            const newSetDiv = document.createElement('div');
+            newSetDiv.className = 'set';
+
+            const newSetLabel = document.createElement('h3');
+            newSetLabel.innerText = `Set ${setCount}`;
+
+            const newWeightInput = document.createElement('input');
+            newWeightInput.type = 'text';
+            newWeightInput.placeholder = 'Enter weight';
+            newWeightInput.name = `set_weight_${exerciseCount}_${setCount}`;
+            newWeightInput.className = 'set_input';
+
+            const newRepsInput = document.createElement('input');
+            newRepsInput.type = 'text';
+            newRepsInput.placeholder = 'Enter reps';
+            newRepsInput.name = `set_reps_${exerciseCount}_${setCount}`;
+            newRepsInput.className = 'set_input';
+
+            newSetDiv.appendChild(newSetLabel);
+            newSetDiv.appendChild(newWeightInput);
+            newSetDiv.appendChild(newRepsInput);
+
+            sets.appendChild(newSetDiv);
+        });
+    }
+
+    document.getElementById('addExerciseButton').addEventListener('click', function () {
+        exerciseCount++;
+
+        const exercisesContainer = document.getElementById('exercisesContainer');
+        const exerciseDiv = document.createElement('div');
+        exerciseDiv.className = 'exercise';
+
+        const exerciseLabel = document.createElement('h2');
+        exerciseLabel.innerText = 'Exercise';
+
+        const exerciseInput = document.createElement('input');
+        exerciseInput.type = 'text';
+        exerciseInput.placeholder = 'Enter exercise';
+        exerciseInput.name = `exercise_name_${exerciseCount}`;
+        exerciseInput.className = 'exercise_input';
+
+        const setsDiv = document.createElement('div');
+        setsDiv.className = 'sets';
+
+        const setLabel = document.createElement('h3');
+        setLabel.innerText = 'Set 1';
+
+        const setDiv = document.createElement('div');
+        setDiv.className = 'set';
+
+        const weightInput = document.createElement('input');
+        weightInput.type = 'text';
+        weightInput.placeholder = 'Enter weight';
+        weightInput.name = `set_weight_${exerciseCount}_1`;
+        weightInput.className = 'set_input';
+
+        const repsInput = document.createElement('input');
+        repsInput.type = 'text';
+        repsInput.placeholder = 'Enter reps';
+        repsInput.name = `set_reps_${exerciseCount}_1`;
+        repsInput.className = 'set_input';
+
+        setDiv.appendChild(weightInput);
+        setDiv.appendChild(repsInput);
+
+        setsDiv.appendChild(setLabel);
+        setsDiv.appendChild(setDiv);
+
+        exerciseDiv.appendChild(exerciseLabel);
+        exerciseDiv.appendChild(exerciseInput);
+        exerciseDiv.appendChild(setsDiv);
+
+        const addSetButton = document.createElement('button');
+        addSetButton.type = 'button';
+        addSetButton.className = 'addSetButton';
+        addSetButton.innerText = 'Add Set';
+        exerciseDiv.appendChild(addSetButton);
+
+        exercisesContainer.appendChild(exerciseDiv);
+
+        addSetHandler(addSetButton);
+    });
+
+    // Attach event handler to the first 'Add Set' button
+    addSetHandler(document.querySelector('.addSetButton'));
+</script>
 {% endblock %}
