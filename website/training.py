@@ -25,20 +25,20 @@ def home():
 
     return render_template("index.html", schedules=schedules, exercises=exercises, sets=sets, current_user=current_user)
 
+
 # Create Schedule
 @training.route("/create_schedule", methods=["POST", "GET"])
 @login_required
 def create_schedule():
     if request.method == "POST":
         schedule_name = request.form.get("schedule_name")
-        exercise_names = request.form.getlist("exercise_name")
-        sets_weight = request.form.getlist("set_weight")
-        sets_reps = request.form.getlist("set_reps")
+        exercise_names = request.form.getlist("exercise_name[]")
+        sets_weight = request.form.getlist("set_weight[]")
+        sets_reps = request.form.getlist("set_reps[]")
         
         schedule = Schedule(schedule_name=schedule_name, date_created=datetime.utcnow(), user_id=current_user.id)
         db.session.add(schedule)
         db.session.commit()
-        # Add the controls and loop through the list
         for exercise_name in exercise_names:
             exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
             db.session.add(exercise)
@@ -48,6 +48,6 @@ def create_schedule():
                     set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                     db.session.add(set)
                     db.session.commit()
-            
+
 
     return render_template("create_schedule.html")
