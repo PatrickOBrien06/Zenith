@@ -39,15 +39,24 @@ def create_schedule():
         schedule = Schedule(schedule_name=schedule_name, date_created=datetime.utcnow(), user_id=current_user.id)
         db.session.add(schedule)
         db.session.commit()
-        for exercise_name in exercise_names:
+
+        # Loop through each exercise
+        for index, exercise_name in enumerate(exercise_names):
             exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
             db.session.add(exercise)
             db.session.commit()
-            for set_weight in sets_weight:
-                for set_reps in sets_reps:
-                    set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
-                    db.session.add(set)
-                    db.session.commit()
 
+            # Extract sets for the current exercise based on index and the total number of exercises
+            sets_per_exercise = len(sets_weight) // len(exercise_names)
+            sets_start = index * sets_per_exercise
+            sets_end = sets_start + sets_per_exercise
+            exercise_sets_weight = sets_weight[sets_start:sets_end]
+            exercise_sets_reps = sets_reps[sets_start:sets_end]
+
+            # Link sets to the current exercise
+            for set_weight, set_reps in zip(exercise_sets_weight, exercise_sets_reps):
+                set_entry = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
+                db.session.add(set_entry)
+                db.session.commit()
 
     return render_template("create_schedule.html")
