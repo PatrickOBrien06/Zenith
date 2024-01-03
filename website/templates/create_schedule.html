@@ -15,8 +15,8 @@
             <div class="sets">
                 <h3>Set 1</h3>
                 <div class="set">
-                    <input type="text" placeholder="Enter weight" name="set_weight[]" class="set_input">
-                    <input type="text" placeholder="Enter reps" name="set_reps[]" class="set_input">
+                    <input type="text" placeholder="Enter weight" name="set_weight_1[]" class="set_input">
+                    <input type="text" placeholder="Enter reps" name="set_reps_1[]" class="set_input">
                 </div>
             </div>
             <button type="button" class="addSetButton">Add Set</button>
@@ -43,13 +43,13 @@
             const newWeightInput = document.createElement('input');
             newWeightInput.type = 'text';
             newWeightInput.placeholder = 'Enter weight';
-            newWeightInput.name = `set_weight[]`;
+            newWeightInput.name = `set_weight_${exerciseCount}[]`;
             newWeightInput.className = 'set_input';
 
             const newRepsInput = document.createElement('input');
             newRepsInput.type = 'text';
             newRepsInput.placeholder = 'Enter reps';
-            newRepsInput.name = `set_reps[]`;
+            newRepsInput.name = `set_reps_${exerciseCount}[]`;
             newRepsInput.className = 'set_input';
 
             newSetDiv.appendChild(newSetLabel);
@@ -88,13 +88,13 @@
         const weightInput = document.createElement('input');
         weightInput.type = 'text';
         weightInput.placeholder = 'Enter weight';
-        weightInput.name = `set_weight[]`;
+        weightInput.name = `set_weight_${exerciseCount}[]`;
         weightInput.className = 'set_input';
 
         const repsInput = document.createElement('input');
         repsInput.type = 'text';
         repsInput.placeholder = 'Enter reps';
-        repsInput.name = `set_reps[]`;
+        repsInput.name = `set_reps_${exerciseCount}[]`;
         repsInput.className = 'set_input';
 
         setDiv.appendChild(weightInput);
