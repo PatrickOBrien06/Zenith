@@ -7,11 +7,14 @@ login_manager = LoginManager()
 db = SQLAlchemy()
 
 def create_app():
+
+    # App Configure
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
     app.config['SECRET_KEY'] = 'mbgodbnfvojvnseofefqwdqwifgbjdfsnf'
     db.init_app(app)
 
+    # Blueprint Setup
     from .auth import auth
 
     app.register_blueprint(auth)
@@ -24,6 +27,7 @@ def create_app():
 
     create_database(app)
 
+    # Login Manager Setup
     login_manager.login_view = "auth.login"
     login_manager.login_message = "You must be signed in to reach this page!"
     login_manager.login_message_category = "danger"

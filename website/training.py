@@ -36,6 +36,7 @@ def create_schedule():
 
         exerciseCounter = 1
 
+        # Loop for exercise_name to be used to grab all set data
         for exercise_name in exercise_names:
             exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
             db.session.add(exercise)
@@ -46,6 +47,7 @@ def create_schedule():
 
             exerciseCounter += 1
 
+            # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
             for setCounter in range(len(sets_weight)):
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
