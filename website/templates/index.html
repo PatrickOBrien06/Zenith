@@ -11,10 +11,55 @@
       padding: 10px;
       text-align: center;
     }
-  </style>
+    /* Additional style for the clickable schedule */
+    .clickable {
+      cursor: pointer;
+    }
+    .selected {
+      background-color: lightblue; /* Modify as needed for selected appearance */
+    }
+</style>
+
+<script>
+    function selectSchedule(scheduleId) {
+        const selectedSchedule = document.getElementById(`schedule_${scheduleId}`);
+        const scheduleIdInput = document.getElementById('scheduleIdInput');
+        
+        if (selectedSchedule && scheduleIdInput) {
+            // Remove previous selection
+            const prevSelected = document.querySelector('.selected');
+            if (prevSelected) {
+                prevSelected.classList.remove('selected');
+            }
+    
+            // Highlight the clicked schedule
+            selectedSchedule.classList.add('selected');
+    
+            // Set the selected schedule ID in a hidden field
+            scheduleIdInput.value = scheduleId;
+        } else {
+            console.error('Element not found.');
+        }
+    }
+
+    function startSelectedSchedule() {
+        const scheduleId = document.getElementById('scheduleIdInput').value;
+        if (scheduleId) {
+            window.location.href = `/run_schedule/${scheduleId}`;
+        } else {
+            // Handle case where no schedule is selected
+            alert('Please select a schedule.');
+        }
+    }
+</script>
+
 <div class="container">
+    <form id="selectScheduleForm" style="display: none;" method="POST" action="/run_schedule">
+        <input type="hidden" name="schedule_id" id="scheduleIdInput">
+    </form>
+
     {% for schedule in schedules %}
-    <div class="card">
+    <div id="schedule_{{ schedule.id }}" class="card clickable" onclick="selectSchedule({{ schedule.id }})">
         <div>
             {{ schedule.schedule_name }}
         </div>
@@ -36,16 +81,16 @@
     {% endfor %}
 </div>
 
-  <div class="bottom-row">
+<div class="bottom-row">
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-auto">
-          <a href="/create_schedule"><button class="btn btn-primary">Create Schedule</button></a>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <a href="/create_schedule"><button class="btn btn-primary">Create Schedule</button></a>
+            </div>
+            <div class="col-auto">
+                <button onclick="startSelectedSchedule()" class="btn btn-secondary">Start Schedule</button>
+            </div>
         </div>
-        <div class="col-auto">
-          <button class="btn btn-secondary">Start Schedule</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 {% endblock %}

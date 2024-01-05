@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Run Schedule{% endblock %}
+{% block content %}
+<h3>{{schedule.schedule_name}}</h3>
+
+{% for exercise in exercises %}
+    <h4>{{exercise.exercise_name}}</h4>
+    {% for set in sets %}
+        <h5>{{ set.weight }}</h5>
+        <h5>{{ set.reps }}</h5>
+    {% endfor %}
+{% endfor %}
+{% endblock %}

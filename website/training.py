@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # Blueprint development
 training = Blueprint("training", __name__, template_folder="templates")
 
+
 # Home / Dashboard layout 
 @training.route("/", methods=['POST', 'GET'])
 @training.route("/home", methods=['POST', 'GET'])
@@ -56,3 +57,15 @@ def create_schedule():
                 db.session.commit()
 
     return render_template("create_schedule.html")
+
+
+# Run Schedule
+@training.route("/run_schedule/<schedule_id>", methods=["POST", "GET"])
+@login_required
+def run_schedule(schedule_id):
+    schedule_name = Schedule.query.filter_by(id=schedule_id).first()
+    exercises = Exercise.query.filter_by(user_id=current_user.id, schedule_id=schedule_id).all()
+    sets = Set.query.filter_by(user_id=current_user.id).all()
+
+    return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
+
