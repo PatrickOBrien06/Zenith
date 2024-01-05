@@ -26,17 +26,23 @@
         const scheduleIdInput = document.getElementById('scheduleIdInput');
         
         if (selectedSchedule && scheduleIdInput) {
-            // Remove previous selection
-            const prevSelected = document.querySelector('.selected');
-            if (prevSelected) {
-                prevSelected.classList.remove('selected');
+            if (selectedSchedule.classList.contains('selected')) {
+                // If already selected, unselect it
+                selectedSchedule.classList.remove('selected');
+                scheduleIdInput.value = ''; // Clear the hidden input value
+            } else {
+                // Remove previous selection
+                const prevSelected = document.querySelector('.selected');
+                if (prevSelected) {
+                    prevSelected.classList.remove('selected');
+                }
+        
+                // Highlight the clicked schedule
+                selectedSchedule.classList.add('selected');
+        
+                // Set the selected schedule ID in a hidden field
+                scheduleIdInput.value = scheduleId;
             }
-    
-            // Highlight the clicked schedule
-            selectedSchedule.classList.add('selected');
-    
-            // Set the selected schedule ID in a hidden field
-            scheduleIdInput.value = scheduleId;
         } else {
             console.error('Element not found.');
         }
