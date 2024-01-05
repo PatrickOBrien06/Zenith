@@ -3,11 +3,21 @@
 {% block content %}
 <h3>{{schedule.schedule_name}}</h3>
 
-{% for exercise in exercises %}
-    <h4>{{exercise.exercise_name}}</h4>
-    {% for set in sets %}
-        <h5>{{ set.weight }}</h5>
-        <h5>{{ set.reps }}</h5>
+<form method="post">
+    {% for exercise in exercises %}
+        <h4>{{exercise.exercise_name}}</h4>
+        {% for set in sets %}
+            {% if exercise.id == set.exercise_id %}
+                <h5>Last Set Weight: {{ set.weight }} lbs</h5>
+                <input type="text" placeholder="Enter New Weight" name="new_weight">
+                <h5>Last Set Reps: {{ set.reps }}</h5>
+                <input type="text" placeholder="Enter New Reps" name="new_reps">
+                <input type="hidden" name="id" value="{{ set.id }}">
+            {% endif %}
+        {% endfor %}
     {% endfor %}
-{% endfor %}
+    <br>
+    <input type="submit" class="mt-2" value="Update">
+</form>
+
 {% endblock %}

@@ -67,5 +67,19 @@ def run_schedule(schedule_id):
     exercises = Exercise.query.filter_by(user_id=current_user.id, schedule_id=schedule_id).all()
     sets = Set.query.filter_by(user_id=current_user.id).all()
 
+    if request.method == "POST":
+        new_weight = request.form.getlist("new_weight")
+        new_reps = request.form.getlist("new_reps")
+        sets_id = request.form.getlist("id")
+
+        for set in sets_id:
+            for setCounter in range(len(new_weight)):
+                weight = float(new_weight[setCounter])
+                reps = int(new_reps[setCounter])
+                set = Set.query.filter_by(id=set).first()
+                set.weight = weight
+                set.reps = reps
+                db.session.commit()
+
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
 
