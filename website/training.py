@@ -72,11 +72,11 @@ def run_schedule(schedule_id):
         new_reps = request.form.getlist("new_reps")
         sets_id = request.form.getlist("id")
 
-        for set in sets_id:
+        for set_id in sets_id:
             for setCounter in range(len(new_weight)):
                 weight = float(new_weight[setCounter])
                 reps = int(new_reps[setCounter])
-                set = Set.query.filter_by(id=set).first()
+                set = Set.query.filter_by(id=set_id).first()
                 set.weight = weight
                 set.reps = reps
                 db.session.commit()
