@@ -74,8 +74,8 @@ def run_schedule(schedule_id):
 
         for set in sets_id:
             for setCounter in range(len(new_weight)):
-                weight = float(new_weight[setCounter])
-                reps = int(new_reps[setCounter])
+                weight = new_weight[setCounter]
+                reps = new_reps[setCounter]
                 set = Set.query.filter_by(id=set).first()
                 set.weight = weight
                 set.reps = reps
