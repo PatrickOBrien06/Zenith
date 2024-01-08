@@ -24,7 +24,7 @@ def home():
 
 
 # Create Schedule
-@training.route("/create_schedule", methods=["POST", "GET"])
+@training.route("/schedule/create", methods=["POST", "GET"])
 @login_required
 def create_schedule():
     if request.method == "POST":
@@ -55,24 +55,34 @@ def create_schedule():
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                 db.session.add(set)
                 db.session.commit()
+            
+            flash("Created schedule!", "success")
 
     return render_template("create_schedule.html")
 
 
 # Run Schedule
-@training.route("/run_schedule/<schedule_id>", methods=["POST", "GET"])
+@training.route("/schedule/<schedule_id>", methods=["POST", "GET"])
 @login_required
 def run_schedule(schedule_id):
     schedule_name = Schedule.query.filter_by(id=schedule_id).first()
-    exercises = Exercise.query.filter_by(user_id=current_user.id, schedule_id=schedule_id).all()
+    exercises = Exercise.query.filter_by(schedule_id=schedule_id).all()
     sets = Set.query.filter_by(user_id=current_user.id).all()
+
+    # Increasing security not allowing the wrong user on an incorrect schedule
+    if schedule_name.user_id != current_user.id:
+        flash("You do not own that schedule!", "danger")
+        return redirect(url_for("training.home"))
 
     if request.method == "POST":
         new_weight = request.form.getlist("new_weight")
         new_reps = request.form.getlist("new_reps")
         sets_id = request.form.getlist("id")
 
+        # Loop to find each set's id
         for set_id in sets_id:
+
+            # Count to the index of new_weight and add them to the table for easy association
             for setCounter in range(len(new_weight)):
 
                 # Update set data
@@ -83,10 +93,13 @@ def run_schedule(schedule_id):
                 set.reps = reps
                 db.session.commit()
 
-                # Add set data to history
+            # Add set data to history
             set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
             db.session.add(set_record)
             db.session.commit()
+            
+        flash("Progress tracked!", "success")
+        return redirect(url_for("training.home"))
                     
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
 

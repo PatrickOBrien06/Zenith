@@ -51,7 +51,7 @@
     function startSelectedSchedule() {
         const scheduleId = document.getElementById('scheduleIdInput').value;
         if (scheduleId) {
-            window.location.href = `/run_schedule/${scheduleId}`;
+            window.location.href = `/schedule/${scheduleId}`;
         } else {
             // Handle case where no schedule is selected
             alert('Please select a schedule.');
@@ -60,7 +60,7 @@
 </script>
 
 <div class="container">
-    <form id="selectScheduleForm" style="display: none;" method="POST" action="/run_schedule">
+    <form id="selectScheduleForm" style="display: none;" method="POST" action="/schedule/create">
         <input type="hidden" name="schedule_id" id="scheduleIdInput">
     </form>
 
@@ -91,7 +91,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-auto">
-                <a href="/create_schedule"><button class="btn btn-primary">Create Schedule</button></a>
+                <a href="/schedule/create"><button class="btn btn-primary">Create Schedule</button></a>
             </div>
             <div class="col-auto">
                 <button onclick="startSelectedSchedule()" class="btn btn-secondary">Start Schedule</button>
