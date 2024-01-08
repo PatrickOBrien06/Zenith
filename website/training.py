@@ -68,7 +68,6 @@ def run_schedule(schedule_id):
     sets = Set.query.filter_by(user_id=current_user.id).all()
 
     if request.method == "POST":
-        ex_id = request.form.getlist("ex_id")
         new_weight = request.form.getlist("new_weight")
         new_reps = request.form.getlist("new_reps")
         sets_id = request.form.getlist("id")
@@ -88,13 +87,6 @@ def run_schedule(schedule_id):
             set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
             db.session.add(set_record)
             db.session.commit()
-
-            print(set_record.set_id)
-            
-        records = History.query.all()
-
-        for record in records:
-                print(record.id)
                     
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
 
