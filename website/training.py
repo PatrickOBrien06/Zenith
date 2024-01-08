@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, flash, session, redirect, url_for
-from .models import User, Schedule, Exercise, Set
+from .models import User, Schedule, Exercise, Set, History 
 from . import db 
 from datetime import datetime
 from flask_login import login_user, logout_user, login_required, current_user
@@ -68,12 +68,15 @@ def run_schedule(schedule_id):
     sets = Set.query.filter_by(user_id=current_user.id).all()
 
     if request.method == "POST":
+        ex_id = request.form.getlist("ex_id")
         new_weight = request.form.getlist("new_weight")
         new_reps = request.form.getlist("new_reps")
         sets_id = request.form.getlist("id")
 
         for set_id in sets_id:
             for setCounter in range(len(new_weight)):
+
+                # Update set data
                 weight = float(new_weight[setCounter])
                 reps = int(new_reps[setCounter])
                 set = Set.query.filter_by(id=set_id).first()
@@ -81,5 +84,17 @@ def run_schedule(schedule_id):
                 set.reps = reps
                 db.session.commit()
 
+                # Add set data to history
+            set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
+            db.session.add(set_record)
+            db.session.commit()
+
+            print(set_record.set_id)
+            
+        records = History.query.all()
+
+        for record in records:
+                print(record.id)
+                    
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
 

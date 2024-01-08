@@ -38,3 +38,12 @@ class Set(db.Model, UserMixin):
     weight = db.Column(db.Float, nullable=False)
     exercise_id = db.Column(db.Integer, db.ForeignKey('exercise.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+
+class History(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    reps = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Float, nullable=False)
+    set_id = db.Column(db.Integer, db.ForeignKey('set.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
