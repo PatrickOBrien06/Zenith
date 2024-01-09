@@ -56,7 +56,7 @@ def create_schedule():
                 db.session.add(set)
                 db.session.commit()
             
-            flash("Created schedule!", "success")
+        flash("Created schedule!", "success")
 
     return render_template("create_schedule.html")
 
