@@ -1,19 +1,53 @@
 {% extends 'base.html' %}
 {% block title %}{% endblock %}
 {% block content %}
-<h1>Create Schedule</h1>
-<form id="scheduleForm" method="post">
+<style>
+    body {
+        margin: 0;
+    }
+
+    .bottom-row {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #e3e3e3;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .create_schedule, .add_exercise, .addSetButton {
+        padding: 2px;
+        border-radius: 20px;
+        background-color: rgb(223, 66, 66);
+        color: white;
+        border-color: white;
+        font-weight: 400;
+        min-width: 120px;
+    }
+
+    .col-auto {
+        width: 45%;
+        min-width: 100px;
+    }
+
+    .content {
+        margin-bottom: 85px;
+    }
+
+</style>
+<h1 align="center" class="mt-4">Create Schedule</h1>
+<form align="center" class="content" id="scheduleForm" method="post">
     <label for="schedule_name">
         <input type="text" placeholder="Enter schedule" name="schedule_name" id="schedule_name">
     </label>
-    <h2>Exercise</h2>
+    <h2>Exercise 1</h2>
     <div id="exercisesContainer">
         <div class="exercise">
             <label for="exercise_name">
                 <input type="text" placeholder="Enter exercise" name="exercise_name[]" class="exercise_input">
             </label>
             <div class="sets">
-                <h3>Set 1</h3>
+                <h3 class="set_num">Set 1</h3>
                 <div class="set">
                     <input type="text" placeholder="Enter weight" name="set_weight_1[]" class="set_input">
                     <input type="text" placeholder="Enter reps" name="set_reps_1[]" class="set_input">
@@ -22,8 +56,16 @@
             <button type="button" class="addSetButton">Add Set</button>
         </div>
     </div>
-    <button type="button" id="addExerciseButton">Add Exercise</button>
-    <button type="submit">Create</button>
+    <div class="bottom-row">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <button type="button" class="add_exercise" id="addExerciseButton">Add Exercise</button>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="create_schedule">Create</button>
+            </div>
+        </div>
+    </div>
 </form>
 
 <script>
@@ -39,6 +81,7 @@
 
             const newSetLabel = document.createElement('h3');
             newSetLabel.innerText = `Set ${setCount}`;
+            newSetLabel.className = "set_num"
 
             const newWeightInput = document.createElement('input');
             newWeightInput.type = 'text';
@@ -50,7 +93,7 @@
             newRepsInput.type = 'text';
             newRepsInput.placeholder = 'Enter reps';
             newRepsInput.name = `set_reps_${exerciseCount}[]`;
-            newRepsInput.className = 'set_input';
+            newRepsInput.className = 'set_input_reps';
 
             newSetDiv.appendChild(newSetLabel);
             newSetDiv.appendChild(newWeightInput);
@@ -68,7 +111,7 @@
         exerciseDiv.className = 'exercise';
 
         const exerciseLabel = document.createElement('h2');
-        exerciseLabel.innerText = 'Exercise';
+        exerciseLabel.innerText = `Exercise ${exerciseCount}`;
 
         const exerciseInput = document.createElement('input');
         exerciseInput.type = 'text';
@@ -89,7 +132,7 @@
         weightInput.type = 'text';
         weightInput.placeholder = 'Enter weight';
         weightInput.name = `set_weight_${exerciseCount}[]`;
-        weightInput.className = 'set_input';
+        weightInput.className = 'set_input_weight';
 
         const repsInput = document.createElement('input');
         repsInput.type = 'text';
