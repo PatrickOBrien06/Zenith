@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     body {
-        margin: 0;
+        margin: 0px;
     }
 
     .bottom-row {
@@ -34,6 +34,16 @@
         margin-bottom: 85px;
     }
 
+    .set_input_weight {
+        margin-right: 4px;
+    }
+
+    @media screen and (max-width: 250px) {
+        .set_input_weight {
+            margin-right: 0px;
+        }
+    }
+    
 </style>
 <h1 align="center" class="mt-4">Create Schedule</h1>
 <form align="center" class="content" id="scheduleForm" method="post">
@@ -47,13 +57,17 @@
                 <input type="text" placeholder="Enter exercise" name="exercise_name[]" class="exercise_input">
             </label>
             <div class="sets">
+
                 <h3 class="set_num">Set 1</h3>
                 <div class="set">
                     <input type="text" placeholder="Enter weight" name="set_weight_1[]" class="set_input">
+
                     <input type="text" placeholder="Enter reps" name="set_reps_1[]" class="set_input">
                 </div>
             </div>
+
             <button type="button" class="addSetButton">Add Set</button>
+
         </div>
     </div>
     <div class="bottom-row">
@@ -87,7 +101,7 @@
             newWeightInput.type = 'text';
             newWeightInput.placeholder = 'Enter weight';
             newWeightInput.name = `set_weight_${exerciseCount}[]`;
-            newWeightInput.className = 'set_input';
+            newWeightInput.className = 'set_input_weight';
 
             const newRepsInput = document.createElement('input');
             newRepsInput.type = 'text';
@@ -138,7 +152,7 @@
         repsInput.type = 'text';
         repsInput.placeholder = 'Enter reps';
         repsInput.name = `set_reps_${exerciseCount}[]`;
-        repsInput.className = 'set_input';
+        repsInput.className = 'set_input_reps';
 
         setDiv.appendChild(weightInput);
         setDiv.appendChild(repsInput);
