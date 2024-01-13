@@ -46,6 +46,10 @@
         .set_input_weight {
             margin-right: 0px;
         }
+
+        .btn-close {
+            margin-left: 0px;
+        }
     }
     
 </style>
@@ -145,6 +149,14 @@
         exerciseInput.name = `exercise_name[]`;
         exerciseInput.className = 'exercise_input';
 
+        const deleteSetButton = document.createElement('button');
+        deleteSetButton.type = 'button';
+        deleteSetButton.className = 'btn-close';
+        deleteSetButton.addEventListener('click', function () {
+        exercisesContainer.removeChild(exerciseDiv);
+        exerciseCount = 1
+        })
+
         const setsDiv = document.createElement('div');
         setsDiv.className = 'sets';
 
@@ -172,8 +184,10 @@
         setsDiv.appendChild(setLabel);
         setsDiv.appendChild(setDiv);
 
+        
         exerciseDiv.appendChild(exerciseLabel);
         exerciseDiv.appendChild(exerciseInput);
+        exerciseDiv.appendChild(deleteSetButton);
         exerciseDiv.appendChild(setsDiv);
 
         const addSetButton = document.createElement('button');
