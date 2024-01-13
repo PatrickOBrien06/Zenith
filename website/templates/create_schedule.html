@@ -15,7 +15,7 @@
       text-align: center;
     }
 
-    .create_schedule, .add_exercise, .addSetButton, .deleteSetButton {
+    .create_schedule, .add_exercise, .addSetButton {
         padding: 2px;
         border-radius: 20px;
         background-color: rgb(223, 66, 66);
@@ -23,7 +23,10 @@
         border-color: white;
         font-weight: 400;
         min-width: 120px;
-        display:inline-block;
+    }
+
+    .btn-close {
+        margin-left: 10px;
     }
 
     .col-auto {
@@ -112,8 +115,7 @@
 
             const deleteSetButton = document.createElement('button');
             deleteSetButton.type = 'button';
-            deleteSetButton.className = 'deleteSetButton';
-            deleteSetButton.innerText = 'Delete Set';
+            deleteSetButton.className = 'btn-close';
             deleteSetButton.addEventListener('click', function () {
             sets.removeChild(newSetDiv);
         });
