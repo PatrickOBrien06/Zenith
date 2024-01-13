@@ -25,8 +25,13 @@
         min-width: 120px;
     }
 
+    .btn-Div {
+        display: inline;
+        }
+
     .btn-close {
         margin-left: 10px;
+        display: inline-block;
     }
 
     .col-auto {
@@ -42,13 +47,21 @@
         margin-right: 4px;
     }
 
-    @media screen and (max-width: 250px) {
+    @media screen and (max-width: 400px) {
         .set_input_weight {
             margin-right: 0px;
         }
 
         .btn-close {
-            margin-left: 0px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-Div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
         }
     }
     
@@ -116,6 +129,9 @@
             newRepsInput.placeholder = 'Enter reps';
             newRepsInput.name = `set_reps_${exerciseCount}[]`;
             newRepsInput.className = 'set_input_reps';
+            
+            const btnDiv = document.createElement('div');
+            btnDiv.className = 'btn-Div';
 
             const deleteSetButton = document.createElement('button');
             deleteSetButton.type = 'button';
@@ -127,6 +143,7 @@
             newSetDiv.appendChild(newSetLabel);
             newSetDiv.appendChild(newWeightInput);
             newSetDiv.appendChild(newRepsInput);
+            newSetDiv.appendChild(btnDiv);
             newSetDiv.appendChild(deleteSetButton);
 
             sets.appendChild(newSetDiv);
@@ -178,6 +195,9 @@
         repsInput.name = `set_reps_${exerciseCount}[]`;
         repsInput.className = 'set_input_reps';
 
+        const btnDiv = document.createElement('div');
+        btnDiv.className = 'btn-Div';
+
         setDiv.appendChild(weightInput);
         setDiv.appendChild(repsInput);
 
@@ -187,6 +207,7 @@
         
         exerciseDiv.appendChild(exerciseLabel);
         exerciseDiv.appendChild(exerciseInput);
+        exerciseDiv.appendChild(btnDiv);
         exerciseDiv.appendChild(deleteSetButton);
         exerciseDiv.appendChild(setsDiv);
 
