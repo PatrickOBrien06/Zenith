@@ -15,7 +15,7 @@
       text-align: center;
     }
 
-    .create_schedule, .add_exercise, .addSetButton {
+    .create_schedule, .add_exercise, .addSetButton, .deleteSetButton {
         padding: 2px;
         border-radius: 20px;
         background-color: rgb(223, 66, 66);
@@ -23,6 +23,7 @@
         border-color: white;
         font-weight: 400;
         min-width: 120px;
+        display:inline-block;
     }
 
     .col-auto {
@@ -109,9 +110,18 @@
             newRepsInput.name = `set_reps_${exerciseCount}[]`;
             newRepsInput.className = 'set_input_reps';
 
+            const deleteSetButton = document.createElement('button');
+            deleteSetButton.type = 'button';
+            deleteSetButton.className = 'deleteSetButton';
+            deleteSetButton.innerText = 'Delete Set';
+            deleteSetButton.addEventListener('click', function () {
+            sets.removeChild(newSetDiv);
+        });
+
             newSetDiv.appendChild(newSetLabel);
             newSetDiv.appendChild(newWeightInput);
             newSetDiv.appendChild(newRepsInput);
+            newSetDiv.appendChild(deleteSetButton);
 
             sets.appendChild(newSetDiv);
         });
