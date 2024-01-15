@@ -65,8 +65,8 @@
     </form>
 
     {% for schedule in schedules %}
-    <div id="schedule_{{ schedule.id }}" class="card clickable" onclick="selectSchedule({{ schedule.id }})">
-        <div class="mt-4">
+    <div id="schedule_{{ schedule.id }}" class="card clickable p-3 mt-3" onclick="selectSchedule({{ schedule.id }})">
+        <div>
             {{ schedule.schedule_name }}
         </div>
         <div>

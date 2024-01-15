@@ -31,20 +31,27 @@ def create_schedule():
         schedule_name = request.form.get("schedule_name")
         exercise_names = request.form.getlist("exercise_name[]")
         
-        # Check if schedule name is empty
         if not schedule_name:
+            # Check if schedule name is valid
             flash("Schedule name cannot be empty!", "danger")
             return render_template("create_schedule.html")
+
+        schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
+        db.session.add(schedule)
+        db.session.commit()
 
         exerciseCounter = 1
 
         # Loop for exercise_name to be used to grab all set data
         for exercise_name in exercise_names:
             
-            # Check if exercise name is empty
             if not exercise_name:
                 flash("Exercise name cannot be empty!", "danger")
                 return render_template("create_schedule.html")
+
+            exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
+            db.session.add(exercise)
+            db.session.commit()
 
             sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
             sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
@@ -55,21 +62,8 @@ def create_schedule():
             for setCounter in range(len(sets_weight)):
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
-
-                # Check if set data is empty
-                if not set_weight or set_reps:
-                    flash("Set cannot be empty!", "danger")
-                    return render_template("create_schedule.html")
-
-                # Post all data
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                 db.session.add(set)
-                db.session.commit()
-                schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
-                db.session.add(schedule)
-                db.session.commit()
-                exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
-                db.session.add(exercise)
                 db.session.commit()
             
         flash("Created schedule!", "success")
