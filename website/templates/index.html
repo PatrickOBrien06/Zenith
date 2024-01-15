@@ -15,6 +15,13 @@
     .clickable {
       cursor: pointer;
     }
+
+    .btnDiv {
+        position: absolute;
+        right: 20px;
+
+    }
+
     .selected {
       background-color: lightblue; /* Modify as needed for selected appearance */
     }
@@ -57,6 +64,15 @@
             alert('Please select a schedule.');
         }
     }
+
+    function deleteSchedule(scheduleId) {
+        const scheduleDiv = document.getElementById(`schedule_${scheduleId}`);
+        if (scheduleId) {
+            scheduleDiv.remove();
+        } else {
+            console.error('Element not found.');
+        }
+    }
 </script>
 
 <div class="container">
@@ -68,14 +84,19 @@
     <div id="schedule_{{ schedule.id }}" class="card clickable p-3 mt-3" onclick="selectSchedule({{ schedule.id }})">
         <div>
             {{ schedule.schedule_name }}
+            <div class="btnDiv d-inline">
+                <button class="btn-close"  onclick="deleteSchedule({{schedule.id}})"></button>
+            </div>
         </div>
         <div>
             {% for exercise in exercises %}
                 {% if exercise.schedule_id == schedule.id %}
+                <hr>
                     {{ exercise.exercise_name }}
                     <div>
                         {% for set in sets %}
                             {% if set.exercise_id == exercise.id %}
+                            
                                 <div>{{ set.weight }} lbs {{ set.reps }} reps</div>
                             {% endif %}
                         {% endfor %}
@@ -99,4 +120,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
