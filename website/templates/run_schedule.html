@@ -5,9 +5,11 @@
 
 <form method="post">
     {% for exercise in exercises %}
-        <h4>{{exercise.exercise_name}}</h4>
+    
+        <h4>{{ exercise.exercise_name }}</h4>
         {% for set in sets %}
             {% if exercise.id == set.exercise_id %}
+            
                 <h5>Last Set Weight: {{ set.weight }} lbs</h5>
                 <input type="text" placeholder="Enter New Weight" name="new_weight">
                 <h5>Last Set Reps: {{ set.reps }}</h5>

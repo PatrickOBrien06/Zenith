@@ -60,14 +60,15 @@ def create_schedule():
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
             for setCounter in range(len(sets_weight)):
-                set_weight = sets_weight[setCounter]
-                set_reps = sets_reps[setCounter]
+                set_weight = sets_weight[setCounter-1]
+                set_reps = sets_reps[setCounter-1]
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                 db.session.add(set)
                 db.session.commit()
             
         flash("Created schedule!", "success")
-
+        return redirect(url_for("training.home"))
+    
     return render_template("create_schedule.html")
 
 
@@ -103,10 +104,10 @@ def run_schedule(schedule_id):
                 set.reps = reps
                 db.session.commit()
 
-            # Add set data to history
-            set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
-            db.session.add(set_record)
-            db.session.commit()
+                # Add set data to history
+                set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
+                db.session.add(set_record)
+                db.session.commit()
             
         flash("Progress tracked!", "success")
         return redirect(url_for("training.home"))

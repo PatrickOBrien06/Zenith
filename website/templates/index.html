@@ -3,6 +3,7 @@
 {% block content %} 
 <style>
     /* Optional custom styles */
+
     .bottom-row {
       position: fixed;
       bottom: 0;
@@ -19,12 +20,24 @@
     .btnDiv {
         position: absolute;
         right: 20px;
-
     }
 
     .selected {
       background-color: lightblue; /* Modify as needed for selected appearance */
     }
+
+    .schedule-name {
+      font-size: 20px;
+    }
+
+    .exercise-name {
+        font-size: 18px;
+    }
+
+    .set-data {
+        font-size: 16px;
+    }
+
 </style>
 
 <script>
@@ -75,28 +88,27 @@
     }
 </script>
 
-<div class="container">
+<div class="container" style="margin-bottom: 15%;">
     <form id="selectScheduleForm" style="display: none;" method="POST" action="/schedule/create">
         <input type="hidden" name="schedule_id" id="scheduleIdInput">
     </form>
 
     {% for schedule in schedules %}
     <div id="schedule_{{ schedule.id }}" class="card clickable p-3 mt-3" onclick="selectSchedule({{ schedule.id }})">
-        <div>
+        <div class="schedule-name">
             {{ schedule.schedule_name }}
             <div class="btnDiv d-inline">
                 <button class="btn-close"  onclick="deleteSchedule({{schedule.id}})"></button>
             </div>
         </div>
-        <div>
+        <div class="exercise-name">
             {% for exercise in exercises %}
                 {% if exercise.schedule_id == schedule.id %}
                 <hr>
                     {{ exercise.exercise_name }}
-                    <div>
+                    <div class="set-data">
                         {% for set in sets %}
                             {% if set.exercise_id == exercise.id %}
-                            
                                 <div>{{ set.weight }} lbs {{ set.reps }} reps</div>
                             {% endif %}
                         {% endfor %}
