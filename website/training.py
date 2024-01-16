@@ -60,8 +60,8 @@ def create_schedule():
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
             for setCounter in range(len(sets_weight)):
-                set_weight = sets_weight[setCounter-1]
-                set_reps = sets_reps[setCounter-1]
+                set_weight = sets_weight[setCounter]
+                set_reps = sets_reps[setCounter]
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
                 db.session.add(set)
                 db.session.commit()
@@ -85,27 +85,23 @@ def run_schedule(schedule_id):
         flash("You do not own that schedule!", "danger")
         return redirect(url_for("training.home"))
 
-    if request.method == "POST":
-        new_weight = request.form.getlist("new_weight")
-        new_reps = request.form.getlist("new_reps")
+    elif request.method == "POST":
         sets_id = request.form.getlist("id")
 
         # Loop to find each set's id
         for set_id in sets_id:
+            new_weight = request.form.get(f"new_weight_{set_id}")
+            new_reps = request.form.get(f"new_reps_{set_id}")
 
-            # Count to the index of new_weight and add them to the table for easy association
-            for setCounter in range(len(new_weight)):
-
-                # Update set data
-                weight = float(new_weight[setCounter])
-                reps = int(new_reps[setCounter])
+            # Update set data if new_weight and new_reps are not None
+            if new_weight is not None and new_reps is not None:
                 set = Set.query.filter_by(id=set_id).first()
-                set.weight = weight
-                set.reps = reps
+                set.weight = new_weight
+                set.reps = new_reps
                 db.session.commit()
 
                 # Add set data to history
-                set_record = History(reps=reps, weight=weight, set_id=set_id, user_id=current_user.id)
+                set_record = History(reps=new_reps, weight=new_weight, set_id=set_id, user_id=current_user.id)
                 db.session.add(set_record)
                 db.session.commit()
             
@@ -113,4 +109,3 @@ def run_schedule(schedule_id):
         return redirect(url_for("training.home"))
                     
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
-

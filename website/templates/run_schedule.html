@@ -11,9 +11,9 @@
             {% if exercise.id == set.exercise_id %}
             
                 <h5>Last Set Weight: {{ set.weight }} lbs</h5>
-                <input type="text" placeholder="Enter New Weight" name="new_weight">
+                <input type="text" placeholder="Enter New Weight" name="new_weight_{{ set.id }}">
                 <h5>Last Set Reps: {{ set.reps }}</h5>
-                <input type="text" placeholder="Enter New Reps" name="new_reps">
+                <input type="text" placeholder="Enter New Reps" name="new_reps_{{ set.id }}">
                 <input type="hidden" name="id" value="{{ set.id }}">
             {% endif %}
         {% endfor %}
