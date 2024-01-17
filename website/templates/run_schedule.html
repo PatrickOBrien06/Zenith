@@ -1,24 +1,78 @@
 {% extends 'base.html' %}
 {% block title %}Run Schedule{% endblock %}
 {% block content %}
-<h3>{{schedule.schedule_name}}</h3>
+<style>
 
-<form method="post">
-    {% for exercise in exercises %}
-        <h4>{{ exercise.exercise_name }}</h4>
-        {% for set in sets %}
-            {% if exercise.id == set.exercise_id %}
-            
-                <h5>Enter Weight</h5>
-                <input type="text" placeholder="{{set.weight}} lbs" name="new_weight_{{ set.id }}">
-                <h5>Enter Reps</h5>
-                <input type="text" placeholder="{{set.reps}} reps" name="new_reps_{{ set.id }}">
-                <input type="hidden" name="id" value="{{ set.id }}">
-            {% endif %}
-        {% endfor %}
-    {% endfor %}
-    <br>
-    <input type="submit" class="mt-2" value="Track">
-</form>
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.track-progress {
+    padding: 2px;
+    border-radius: 20px;
+    background-color: rgb(223, 66, 66);
+    color: white;
+    border-color: white;
+    font-weight: 400;
+    min-width: 120px;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */
+}
+
+.grid-item {
+    padding: 5px; /* Adjust the padding for each grid item */
+}
+
+label {
+    display: block; /* Display labels as block elements */
+    margin-bottom: 5px; /* Add some space between labels and input fields */
+}
+</style>
+
+
+<div class="center-container">
+    <div class="m-4 p-3">
+        <h1 align="center">{{ schedule.schedule_name }}</h1>
+        <form method="post">
+            {% for exercise in exercises %}
+            <hr>
+                <h4 align="center">{{ exercise.exercise_name }}</h4>
+                <div class="grid-container">
+                    <div class="grid-item">
+                        <label>Weight</label>
+                    </div>
+                    <div class="grid-item">
+                        <label>Reps</label>
+                    </div>
+                    <!-- Loop Through Sets for the Exercise -->
+                    {% for set in sets %}
+                        {% if exercise.id == set.exercise_id %}
+                            <div class="grid-item">
+                                <input type="text" placeholder="{{ set.weight }} lbs" name="new_weight_{{ set.id }}">
+                            </div>
+                            <div class="grid-item">
+                                <input type="text" placeholder="{{ set.reps }} reps" name="new_reps_{{ set.id }}">
+                                <input type="hidden" name="id" value="{{ set.id }}">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <br>
+            <div align="center">
+            <input type="submit" class="track-progress mt-2" value="Track">
+        </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
