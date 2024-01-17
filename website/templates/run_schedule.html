@@ -5,21 +5,20 @@
 
 <form method="post">
     {% for exercise in exercises %}
-    
         <h4>{{ exercise.exercise_name }}</h4>
         {% for set in sets %}
             {% if exercise.id == set.exercise_id %}
             
-                <h5>Last Set Weight: {{ set.weight }} lbs</h5>
-                <input type="text" placeholder="Enter New Weight" name="new_weight_{{ set.id }}">
-                <h5>Last Set Reps: {{ set.reps }}</h5>
-                <input type="text" placeholder="Enter New Reps" name="new_reps_{{ set.id }}">
+                <h5>Enter Weight</h5>
+                <input type="text" placeholder="{{set.weight}} lbs" name="new_weight_{{ set.id }}">
+                <h5>Enter Reps</h5>
+                <input type="text" placeholder="{{set.reps}} reps" name="new_reps_{{ set.id }}">
                 <input type="hidden" name="id" value="{{ set.id }}">
             {% endif %}
         {% endfor %}
     {% endfor %}
     <br>
-    <input type="submit" class="mt-2" value="Update">
+    <input type="submit" class="mt-2" value="Track">
 </form>
 
 {% endblock %}

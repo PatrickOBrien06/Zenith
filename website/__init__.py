@@ -1,17 +1,21 @@
 from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
 
 login_manager = LoginManager()
 
 db = SQLAlchemy()
+
+load_dotenv()
 
 def create_app():
 
     # App Configure
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///project.db"
-    app.config['SECRET_KEY'] = 'mbgodbnfvojvnseofefqwdqwifgbjdfsnf'
+    app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY', 'a_default_secret_key')
     db.init_app(app)
 
     # Blueprint Setup
