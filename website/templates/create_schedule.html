@@ -47,7 +47,7 @@
         margin-right: 4px;
     }
 
-    @media screen and (max-width: 400px) {
+    @media screen and (max-width: 600px) {
         .set_input_weight {
             margin-right: 0px;
         }
@@ -55,6 +55,7 @@
         .btn-close {
             margin-top: 10px;
             margin-bottom: 10px;
+            margin-right: 3%;
         }
 
         .btn-Div {
@@ -62,6 +63,10 @@
             justify-content: center;
             align-items: center;
             width: 100vw;
+        }
+
+        .set_input_reps {
+            margin: 0px;
         }
     }
     
@@ -129,6 +134,7 @@
             newRepsInput.placeholder = 'Enter reps';
             newRepsInput.name = `set_reps_${exerciseCount}[]`;
             newRepsInput.className = 'set_input_reps';
+            newRepsInput.style.margin = '3px';
             
             const btnDiv = document.createElement('div');
             btnDiv.className = 'btn-Div';
@@ -194,6 +200,7 @@
         repsInput.placeholder = 'Enter reps';
         repsInput.name = `set_reps_${exerciseCount}[]`;
         repsInput.className = 'set_input_reps';
+        repsInput.style.margin = '3px';
 
         const btnDiv = document.createElement('div');
         btnDiv.className = 'btn-Div';
