@@ -80,7 +80,7 @@ def run_schedule(schedule_id):
     exercises = Exercise.query.filter_by(schedule_id=schedule_id).all()
     sets = Set.query.filter_by(user_id=current_user.id).all()
 
-    # Increasing security not allowing the wrong user on an incorrect schedule
+    # Increased security not allowing the wrong user on an incorrect schedule
     if schedule_name.user_id != current_user.id:
         flash("You do not own that schedule!", "danger")
         return redirect(url_for("training.home"))
