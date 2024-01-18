@@ -54,7 +54,7 @@ def create_schedule():
             for setCounter in range(len(sets_weight)):
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
-                if (set_weight is not '') or (set_reps is not ''):
+                if (set_weight != '') or (set_reps != ''):
                     
                     # Add set data to database
                     schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
@@ -97,7 +97,7 @@ def run_schedule(schedule_id):
             new_reps = request.form.get(f"new_reps_{set_id}")
 
             # Update set data if new_weight and new_reps are not None
-            if (new_weight is not '') or (new_reps is not ''):
+            if (new_weight != '') or (new_reps != ''):
                 set = Set.query.filter_by(id=set_id).first()
                 set.weight = new_weight
                 set.reps = new_reps
