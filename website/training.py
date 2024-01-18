@@ -36,10 +36,6 @@ def create_schedule():
             flash("Schedule name cannot be empty!", "danger")
             return render_template("create_schedule.html")
 
-        schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
-        db.session.add(schedule)
-        db.session.commit()
-
         exerciseCounter = 1
 
         # Loop for exercise_name to be used to grab all set data
@@ -48,10 +44,6 @@ def create_schedule():
             if not exercise_name:
                 flash("Exercise name cannot be empty!", "danger")
                 return render_template("create_schedule.html")
-
-            exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
-            db.session.add(exercise)
-            db.session.commit()
 
             sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
             sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
@@ -62,12 +54,23 @@ def create_schedule():
             for setCounter in range(len(sets_weight)):
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
-                set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
-                db.session.add(set)
-                db.session.commit()
-            
-        flash("Created schedule!", "success")
-        return redirect(url_for("training.home"))
+                if (set_weight is not '') or (set_reps is not ''):
+                    
+                    # Add set data to database
+                    schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
+                    db.session.add(schedule)
+                    db.session.commit()
+                    exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
+                    db.session.add(exercise)
+                    db.session.commit()
+                    set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
+                    db.session.add(set)
+                    db.session.commit()
+
+                    flash("Created schedule!", "success")
+                    return redirect(url_for("training.home"))
+                else:
+                    flash("Inputs cannot be empty!", "danger")
     
     return render_template("create_schedule.html")
 
@@ -94,7 +97,7 @@ def run_schedule(schedule_id):
             new_reps = request.form.get(f"new_reps_{set_id}")
 
             # Update set data if new_weight and new_reps are not None
-            if new_weight is not None and new_reps is not None:
+            if (new_weight is not '') or (new_reps is not ''):
                 set = Set.query.filter_by(id=set_id).first()
                 set.weight = new_weight
                 set.reps = new_reps
