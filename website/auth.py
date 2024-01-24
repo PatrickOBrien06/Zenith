@@ -65,5 +65,4 @@ def login():
 @auth.route("/logout", methods=["POST", "GET"])
 def logout():
     logout_user()
-    flash("Logged out!", "success")
     return redirect(url_for("auth.login"))
