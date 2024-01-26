@@ -49,10 +49,6 @@ def create_schedule():
                 flash("Exercise name cannot be empty!", "danger")
                 return render_template("create_schedule.html")
 
-            exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
-            db.session.add(exercise)
-            db.session.commit()
-
             sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
             sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
 
@@ -60,6 +56,8 @@ def create_schedule():
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
             for setCounter in range(len(sets_weight)):
+                exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
+                db.session.add(exercise)
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
@@ -98,7 +96,6 @@ def run_schedule(schedule_id):
                 set = Set.query.filter_by(id=set_id).first()
                 set.weight = new_weight
                 set.reps = new_reps
-                db.session.commit()
 
                 # Add set data to history
                 set_record = History(reps=new_reps, weight=new_weight, set_id=set_id, user_id=current_user.id)

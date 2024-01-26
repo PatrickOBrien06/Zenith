@@ -14,6 +14,13 @@ class User(db.Model, UserMixin):
     schedules = db.relationship("Schedule", backref="user", lazy=True)
 
 
+class PasswordResetToken(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete='CASCADE'))
+    token = db.Column(db.String(100), unique=True, nullable=False)
+    expiration_time = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
+
+
 class Schedule(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     schedule_name = db.Column(db.String(100), nullable=False)
