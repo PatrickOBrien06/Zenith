@@ -20,7 +20,7 @@ def home():
     exercises = Exercise.query.filter_by(user_id=current_user.id).all()
     sets = Set.query.filter_by(user_id=current_user.id).all()
 
-    return render_template("index.html", schedules=schedules, exercises=exercises, sets=sets, current_user=current_user)
+    return render_template("index.html", schedules=schedules, exercises=exercises, sets=sets, current_user=current_user, username=current_user.username)
 
 
 # Create Schedule
@@ -52,12 +52,14 @@ def create_schedule():
             sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
             sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
 
+            exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
+            db.session.add(exercise)
+            db.session.commit()
+
             exerciseCounter += 1
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
             for setCounter in range(len(sets_weight)):
-                exercise = Exercise(exercise_name=exercise_name, schedule_id=schedule.id, user_id=current_user.id)
-                db.session.add(exercise)
                 set_weight = sets_weight[setCounter]
                 set_reps = sets_reps[setCounter]
                 set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
@@ -65,7 +67,7 @@ def create_schedule():
                 db.session.commit()
             
         flash("Created schedule!", "success")
-        return redirect(url_for("training.home"))
+        return redirect(url_for("training.home", username=current_user.username))
     
     return render_template("create_schedule.html")
 
@@ -81,7 +83,7 @@ def run_schedule(schedule_id):
     # Increased security not allowing the wrong user on an incorrect schedule
     if schedule_name.user_id != current_user.id:
         flash("You do not own that schedule!", "danger")
-        return redirect(url_for("training.home"))
+        return redirect(url_for("training.home", username=current_user.username))
 
     elif request.method == "POST":
         sets_id = request.form.getlist("id")
@@ -103,6 +105,6 @@ def run_schedule(schedule_id):
                 db.session.commit()
             
         flash("Progress tracked!", "success")
-        return redirect(url_for("training.home"))
+        return redirect(url_for("training.home", username=current_user.username))
                     
     return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)

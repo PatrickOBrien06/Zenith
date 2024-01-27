@@ -41,7 +41,7 @@ def signup():
             db.session.commit()
             login_user(user, remember=True)
             flash("User created!", "success")
-            return redirect(url_for("training.home"))
+            return redirect(url_for("training.home", username=username))
 
     return render_template("signup.html")
 
@@ -59,7 +59,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash("Signed In!", "success")
                 login_user(user, remember=True)
-                return redirect(url_for("training.home"))
+                return redirect(url_for("training.home", username=user.username))
             
             # Error handling
             else:
@@ -77,7 +77,7 @@ def logout():
     return redirect(url_for("auth.login"))
 
 
-# Password Recovery
+# Password Recovery Request
 @auth.route("/forgot_password", methods=["POST", "GET"])
 def forgot_password():
     if request.method == "POST":
@@ -85,16 +85,13 @@ def forgot_password():
         email_exists = User.query.filter_by(email=email).first()
 
         if email_exists:
-            
-            # reset_token = secrets.token_urlsafe(32)
-            alphabet = string.ascii_uppercase + string.digits
-            reset_token = ''.join(secrets.choice(alphabet) for i in range(6))
+            reset_token = secrets.token_urlsafe(32)
             print(reset_token)
             expiration_time = datetime.now() + timedelta(minutes=5)
-            # reset_link = url_for("auth.reset_password", token=reset_token, _external=True)
+            reset_link = url_for("auth.reset_password", id=email_exists.id, token=reset_token, _external=True)
 
             subject = "Password Reset"
-            body = f"Use this code and enter it as the verification code to reset your password:  {reset_token}"
+            body = f"Click on this link to reset your password: {reset_link}"
             to_email = email
             outlook_username = os.getenv("outlook_username")
             outlook_password = os.getenv("outlook_password")
@@ -106,61 +103,50 @@ def forgot_password():
             message["Subject"] = subject
 
             # Attach the body to the email
-            print("Attaching")
             message.attach(MIMEText(body, "plain"))
 
             # Connect to the Outlook SMTP server
-            print("Connecting")
             with smtplib.SMTP("smtp.office365.com", 587) as server:
-                print("Connected!")
                 
                 # Start TLS Encryption for security
-                print("Starting TLS")
                 server.starttls()
 
                 # Log in to the SMTP server
-                print("Logging In")
                 server.login(outlook_username, outlook_password)
 
                 # Send the email
-                print("Sending")
                 server.sendmail(outlook_username, to_email, message.as_string())
 
             token = PasswordResetToken(user_id=email_exists.id, token=reset_token, expiration_time=expiration_time)
             db.session.add(token)
             db.session.commit()
 
-            flash("Password reset instructions sent to your email", "success")
-            return redirect(url_for("auth.reset_password"))
-
+            flash("Password reset instructions sent to your email!", "success")
         else:
             flash("Email not found!", "danger")
 
     return render_template("forgot_password.html")
 
+# Password Reset Authentication
+@auth.route("/reset_password/<id>/<token>", methods=["GET", "POST"])
+def reset_password(id, token):
+    token_exists = PasswordResetToken.query.filter_by(token=token).first()
+    user = User.query.filter_by(id=id).first()
 
-@auth.route("/reset_password", methods=["GET", "POST"])
-def reset_password():
-    if request.method == "POST":
-        password1 = request.form.get('password1')
-        password2 = request.form.get('password2')
-        verification_code = request.form.get("verification_code")
-
-        code = PasswordResetToken.query.filter_by(token=verification_code).first()
-
-        if code and code.expiration_time > datetime.now():
+    if token_exists and datetime.now() < token_exists.expiration_time:
+        if request.method == "POST":
+            password1 = request.form.get('password1')
+            password2 = request.form.get('password2')
             if password1 == password2:
-                user = User.query.filter_by(id=code.user_id).first()
                 password_hash = generate_password_hash(password1, method="pbkdf2")
                 user.password = password_hash
-                db.session.delete(code)
                 db.session.commit()
                 flash("Password reset!", "success")
                 return redirect(url_for("auth.login"))
             else:
                 flash("Passwords don't match!", "danger")
-        else: 
-            flash("Incorrect or expired verification code, request another!", "danger")
-            return redirect(url_for("auth.forgot_password"))
-    
-    return render_template("reset_password.html")
+
+        return render_template("reset_password.html", token=token)
+    else:
+        flash("Invalid or expired token!", "danger")
+        return redirect(url_for("auth.forgot_password"))

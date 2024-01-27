@@ -81,8 +81,9 @@
     }
     
 </style>
-<h1 align="center" class="mt-4">Create Schedule</h1>
-<form class="content" id="scheduleForm" method="post">
+<div class="container shadow bg-light p-3 mt-4 rounded">
+<h1 align="center" class="mt-2">Create Schedule</h1>
+<form id="scheduleForm" method="post">
     <div class="scheduleDiv">
         <label for="schedule_name" class="scheduleDiv">
             <input type="text" placeholder="Enter schedule" name="schedule_name" id="schedule_name">
@@ -108,6 +109,7 @@
 
         </div>
     </div>
+</div>
     <div class="bottom-row">
         <div class="row justify-content-center">
             <div class="col-auto">
@@ -119,6 +121,7 @@
         </div>
     </div>
 </form>
+
 
 <script>
     let exerciseCount = 1;

@@ -8,7 +8,6 @@
       position: fixed;
       bottom: 0;
       width: 100%;
-      background-color: #f8f9fa;
       padding: 10px;
       text-align: center;
     }
@@ -20,6 +19,15 @@
     .btnDiv {
         position: absolute;
         right: 20px;
+    }
+
+    .button {
+        padding: 2px;
+        border-radius: 20px;
+        background-color: rgb(223, 66, 66);
+        color: white;
+        font-weight: 400;
+        min-width: 150px;
     }
 
     .selected {
@@ -88,7 +96,8 @@
     }
 </script>
 
-<div class="container" style="margin-bottom: 15%;">
+<div class="container shadow-lg p-3 mb-5 mt-4 bg-light rounded" style="margin-bottom: 15%;">
+    <h3 class="mt-2 mb-4 ">Hello, {{username}}!</h3>
     <form id="selectScheduleForm" style="display: none;" method="POST" action="/schedule/create">
         <input type="hidden" name="schedule_id" id="scheduleIdInput">
     </form>
@@ -119,15 +128,14 @@
     </div>
     {% endfor %}
 </div>
-
-<div class="bottom-row">
+<div class="bottom-row bg-light">
     <div class="container">
         <div class="d-flex flex-row justify-content-around">
             <div class="col-auto">
-                <a href="/schedule/create"><button class="btn btn-primary">Create Schedule</button></a>
+                <a href="/schedule/create"><button class="button">Create Schedule</button></a>
             </div>
             <div class="col-auto">
-                <button onclick="startSelectedSchedule()" class="btn btn-secondary">Start Schedule</button>
+                <button onclick="startSelectedSchedule()" class="button">Start Schedule</button>
             </div>
         </div>
     </div>
