@@ -59,12 +59,18 @@ def create_schedule():
             exerciseCounter += 1
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
-            for setCounter in range(len(sets_weight)):
-                set_weight = sets_weight[setCounter]
-                set_reps = sets_reps[setCounter]
-                set = Set(reps=set_reps, weight=set_weight, exercise_id=exercise.id, user_id=current_user.id)
-                db.session.add(set)
-                db.session.commit()
+            try:
+                for setCounter in range(len(sets_weight)):
+                    set_weight = sets_weight[setCounter]
+                    set_reps = sets_reps[setCounter]
+                    set = Set(reps=int(set_reps), weight=float(set_weight), exercise_id=exercise.id, user_id=current_user.id)
+                    db.session.add(set)
+                    db.session.commit()
+
+            # Handle any set data inputs not a int or float
+            except ValueError:
+                flash("Set weight and reps must be a number!", "danger")
+                return render_template("create_schedule.html")
             
         flash("Created schedule!", "success")
         return redirect(url_for("training.home", username=current_user.username))

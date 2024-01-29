@@ -35,12 +35,13 @@ def signup():
         # User creation
         else:
             password_hash = generate_password_hash(password1, method='pbkdf2')
+            session['email'] = email
             user = User(email=email, username=username, password=password_hash)
-            session[email] = password_hash
+            alphabet = string.ascii_uppercase + string.digits
+            code = "".join(secrets.choice(alphabet) for i in range(6))
+            expiration_time = datetime.utcnow() + timedelta(minutes=5)
             db.session.add(user)
             db.session.commit()
-            login_user(user, remember=True)
-            flash("User created!", "success")
             return redirect(url_for("training.home", username=username))
 
     return render_template("signup.html")
@@ -87,7 +88,7 @@ def forgot_password():
         if email_exists:
             reset_token = secrets.token_urlsafe(32)
             print(reset_token)
-            expiration_time = datetime.now() + timedelta(minutes=5)
+            expiration_time = datetime.utcnow() + timedelta(minutes=5)
             reset_link = url_for("auth.reset_password", id=email_exists.id, token=reset_token, _external=True)
 
             subject = "Password Reset"
@@ -133,7 +134,7 @@ def reset_password(id, token):
     token_exists = PasswordResetToken.query.filter_by(token=token).first()
     user = User.query.filter_by(id=id).first()
 
-    if token_exists and datetime.now() < token_exists.expiration_time:
+    if token_exists and datetime.utcnow() < token_exists.expiration_time:
         if request.method == "POST":
             password1 = request.form.get('password1')
             password2 = request.form.get('password2')
