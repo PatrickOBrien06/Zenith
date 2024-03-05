@@ -42,7 +42,8 @@ def signup():
             expiration_time = datetime.utcnow() + timedelta(minutes=5)
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for("training.home", username=username))
+            login_user(user, remember=True)
+            return redirect(url_for("training.home", username=user.username))
 
     return render_template("signup.html")
 
