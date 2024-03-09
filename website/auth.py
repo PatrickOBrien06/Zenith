@@ -37,9 +37,9 @@ def signup():
             password_hash = generate_password_hash(password1, method='pbkdf2')
             session['email'] = email
             user = User(email=email, username=username, password=password_hash)
-            alphabet = string.ascii_uppercase + string.digits
-            code = "".join(secrets.choice(alphabet) for i in range(6))
-            expiration_time = datetime.utcnow() + timedelta(minutes=5)
+            # alphabet = string.ascii_uppercase + string.digits
+            # code = "".join(secrets.choice(alphabet) for i in range(6))
+            # expiration_time = datetime.utcnow() + timedelta(minutes=5)
             db.session.add(user)
             db.session.commit()
             login_user(user, remember=True)

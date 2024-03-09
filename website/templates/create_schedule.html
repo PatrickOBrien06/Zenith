@@ -30,7 +30,7 @@
         }
 
     .btn-close {
-        margin-left: 10px;
+        margin: 2px;
         display: inline-block;
     }
 
@@ -47,16 +47,17 @@
         margin-right: 4px;
     }
 
+    .set_input_reps_new {
+        margin: 3px;
+    }
 
-    @media screen and (max-width: 600px) {
+    @media screen and (max-width: 400px) {
         .set_input_weight {
             margin-right: 0px;
         }
 
         .btn-close {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            margin-right: 3%;
+            margin: 2px;
         }
 
         .btn-Div {
@@ -69,28 +70,32 @@
         .set_input_reps {
             margin: 0px;
         }
+        
+        .set_input_reps_new {
+            margin: 0px;
+    }
     }
     
 </style>
 <div class="container shadow bg-light p-3 mt-4 mb-5 rounded">
-<h1 class="mt-2">Create Schedule</h1>
+<h1 class="display-4 mt-2">Create Schedule</h1>
 <form id="scheduleForm" method="post">
     <div class="scheduleDiv">
-        <input type="text" placeholder="Enter schedule" name="schedule_name" id="schedule_name">
+        <input type="text" placeholder="Enter schedule" name="schedule_name" id="schedule_name" required>
     </div>
-    <h2>Exercise 1</h2>
+    <h2 class="display-5">Exercise 1</h2>
     <div id="exercisesContainer">
         <div class="exercise">
             <label for="exercise_name" class="exerciseDiv">
-                <input type="text" placeholder="Enter exercise" name="exercise_name[]" class="exercise_input">
+                <input type="text" placeholder="Enter exercise" name="exercise_name[]" class="exercise_input" required>
             </label>
             <div class="sets">
 
-                <h3 class="set_num">Set 1</h3>
+                <h3 class="set_num display-5">Set 1</h3>
                 <div class="set">
-                    <input type="text" placeholder="Enter weight" name="set_weight_1[]" class="set_input">
+                    <input type="text" placeholder="Enter weight" name="set_weight_1[]" class="set_input" required>
 
-                    <input type="text" placeholder="Enter reps" name="set_reps_1[]" class="set_input">
+                    <input type="text" placeholder="Enter reps" name="set_reps_1[]" class="set_input" required>
                 </div>
             </div>
 
@@ -125,21 +130,22 @@
 
             const newSetLabel = document.createElement('h3');
             newSetLabel.innerText = `Set ${setCount}`;
-            newSetLabel.className = "set_num"
+            newSetLabel.className = "set_num display-5"
 
             const newWeightInput = document.createElement('input');
             newWeightInput.type = 'text';
             newWeightInput.placeholder = 'Enter weight';
             newWeightInput.name = `set_weight_${exerciseCount}[]`;
             newWeightInput.className = 'set_input_weight';
+            newWeightInput.required = 'True';
 
             const newRepsInput = document.createElement('input');
             newRepsInput.type = 'text';
             newRepsInput.placeholder = 'Enter reps';
             newRepsInput.name = `set_reps_${exerciseCount}[]`;
-            newRepsInput.className = 'set_input_reps';
-            newRepsInput.style.margin = '3px';
-            
+            newRepsInput.className = 'set_input_reps_new';
+            newRepsInput.required = 'True';
+          
             const btnDiv = document.createElement('div');
             btnDiv.className = 'btn-Div';
 
@@ -169,6 +175,7 @@
 
         const exerciseLabel = document.createElement('h2');
         exerciseLabel.innerText = `Exercise ${exerciseCount}`;
+        exerciseLabel.className = 'display-5';
 
         const exerciseInput = document.createElement('input');
         exerciseInput.type = 'text';
@@ -179,6 +186,7 @@
         const deleteSetButton = document.createElement('button');
         deleteSetButton.type = 'button';
         deleteSetButton.className = 'btn-close';
+        deleteSetButton.style.display = 'block';
         deleteSetButton.addEventListener('click', function () {
         exercisesContainer.removeChild(exerciseDiv);
         exerciseCount = 1
@@ -189,6 +197,7 @@
 
         const setLabel = document.createElement('h3');
         setLabel.innerText = 'Set 1';
+        setLabel.className = 'display-5';
 
         const setDiv = document.createElement('div');
         setDiv.className = 'set';
@@ -203,8 +212,7 @@
         repsInput.type = 'text';
         repsInput.placeholder = 'Enter reps';
         repsInput.name = `set_reps_${exerciseCount}[]`;
-        repsInput.className = 'set_input_reps';
-        repsInput.style.margin = '3px';
+        repsInput.className = 'set_input_reps_new';
 
         const btnDiv = document.createElement('div');
         btnDiv.className = 'btn-Div';
@@ -217,8 +225,8 @@
 
         
         exerciseDiv.appendChild(exerciseLabel);
-        exerciseDiv.appendChild(exerciseInput);
         exerciseDiv.appendChild(btnDiv);
+        exerciseDiv.appendChild(exerciseInput);
         exerciseDiv.appendChild(deleteSetButton);
         exerciseDiv.appendChild(setsDiv);
 

@@ -36,18 +36,34 @@ def create_schedule():
             flash("Schedule name cannot be empty!", "danger")
             return render_template("create_schedule.html")
 
+        exerciseCounter = 1
+
+        # Check through exercise names to valid them
+        for exercise_name in exercise_names:
+            
+            # If empty flash message and redirect user
+            if exercise_name == "" or None:
+                flash("Exercise name cannot be empty!", "danger")
+                return render_template("create_schedule.html")
+
+            sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
+            sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
+
+            # Check through sets weight and sets reps to valid
+            for i, set_weight in enumerate(sets_weight):
+
+                # If not numeric flash message and redirect user
+                if not set_weight.isnumeric() or not sets_reps[i].isnumeric():
+                    flash("Weight and reps must be a number!", "danger")
+                    return render_template("create_schedule.html")
+             
+        # Save schudule
         schedule = Schedule(schedule_name=schedule_name, user_id=current_user.id)
         db.session.add(schedule)
         db.session.commit()
 
-        exerciseCounter = 1
-
         # Loop for exercise_name to be used to grab all set data
         for exercise_name in exercise_names:
-            
-            if not exercise_name:
-                flash("Exercise name cannot be empty!", "danger")
-                return render_template("create_schedule.html")
 
             sets_weight = request.form.getlist(f"set_weight_{exerciseCounter}[]")
             sets_reps = request.form.getlist(f"set_reps_{exerciseCounter}[]")
@@ -59,18 +75,12 @@ def create_schedule():
             exerciseCounter += 1
 
             # Loop through sets_weight, grabbing the value for each and grabbing the corrosponding set_reps
-            try:
-                for setCounter in range(len(sets_weight)):
-                    set_weight = sets_weight[setCounter]
-                    set_reps = sets_reps[setCounter]
-                    set = Set(reps=int(set_reps), weight=float(set_weight), exercise_id=exercise.id, user_id=current_user.id)
-                    db.session.add(set)
-                    db.session.commit()
-
-            # Handle any set data inputs not a int or float
-            except ValueError:
-                flash("Set weight and reps must be a number!", "danger")
-                return render_template("create_schedule.html")
+            for setCounter, i in enumerate(sets_weight):
+                set_weight = sets_weight[setCounter]
+                set_reps = sets_reps[setCounter]
+                set = Set(reps=int(set_reps), weight=float(set_weight), exercise_id=exercise.id, user_id=current_user.id)
+                db.session.add(set)
+                db.session.commit()
             
         flash("Created schedule!", "success")
         return redirect(url_for("training.home", username=current_user.username))
@@ -94,22 +104,32 @@ def run_schedule(schedule_id):
     elif request.method == "POST":
         sets_id = request.form.getlist("id")
 
+        # Check to see if all updated data is valid
+        for set_id in sets_id:
+            try:
+                new_weight = int(request.form.get(f"new_weight_{set_id}"))
+                new_reps = int(request.form.get(f"new_reps_{set_id}"))
+
+            except ValueError: 
+                flash("Weight and reps must be a number!", "danger")
+                return render_template("run_schedule.html", schedule=schedule_name, exercises=exercises, sets=sets)
+
         # Loop to find each set's id
         for set_id in sets_id:
-            new_weight = request.form.get(f"new_weight_{set_id}")
-            new_reps = request.form.get(f"new_reps_{set_id}")
-
-            # Update set data if new_weight and new_reps are not None
-            if new_weight is not None and new_reps is not None:
-                set = Set.query.filter_by(id=set_id).first()
-                set.weight = new_weight
-                set.reps = new_reps
-
-                # Add set data to history
-                set_record = History(reps=new_reps, weight=new_weight, set_id=set_id, user_id=current_user.id)
-                db.session.add(set_record)
-                db.session.commit()
             
+            new_weight = int(request.form.get(f"new_weight_{set_id}"))
+            new_reps = int(request.form.get(f"new_reps_{set_id}"))
+
+            # Update set data if new_weight and new_reps are numeric
+            set = Set.query.filter_by(id=set_id).first()
+            set.weight = new_weight
+            set.reps = new_reps
+
+            # Add set data to history
+            set_record = History(reps=new_reps, weight=new_weight, set_id=set_id, user_id=current_user.id)
+            db.session.add(set_record)
+            db.session.commit()
+        
         flash("Progress tracked!", "success")
         return redirect(url_for("training.home", username=current_user.username))
                     
